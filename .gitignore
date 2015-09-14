@@ -1,1 +1,4 @@
 .ds_store
+dump.rdb
+node_modules
+npm-debug.log
