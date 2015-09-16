@@ -12,7 +12,7 @@ app.set('view engine', 'ejs');
 
 app.get('/', function(request, response) {
   response.send('Hello There!');
-});index
+});
 
 app.get('/cool', function(request, response) {
   response.send(cool());
