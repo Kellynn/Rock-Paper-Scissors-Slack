@@ -1,5 +1,4 @@
 var express = require('express'),
-  slack = require('slack-client'),
   bodyParser = require('body-parser'),
   redis = require('redis.js'),
   app = express();
