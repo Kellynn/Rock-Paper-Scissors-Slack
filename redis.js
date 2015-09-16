@@ -1,3 +1,5 @@
+Q = require('q');
+
 var redis,
     rtg;
 
