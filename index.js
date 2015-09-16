@@ -28,13 +28,13 @@ app.post('/commands', function(request, response) {
     redis.newMatch(userName, 'target');
 		response.send(buildResponse("Rock, Paper, Scissors, SHOOT!"));
 	} else if (text.indexOf('rock') > -1) {
-    response.send(buildResponse(redis.shoot(userName, 'target', 'rock', null));
+    response.send(buildResponse(redis.shoot(userName, 'target', 'rock', null)));
 	} else if (text.indexOf('paper') > -1) {
 		response.send(buildResponse('You chose paper'));
 	} else if (text.indexOf('scissors') > -1) {
 		response.send(buildResponse('You chose scissors'));
 	} else if (text.indexOf('delete') > -1) {
-    response.send(buildResponse(redis.delete(userName)));
+    response.send(buildResponse(redis.del(userName)));
   }
 });
 
