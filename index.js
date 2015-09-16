@@ -27,10 +27,10 @@ app.post('/commands', function(request, response) {
   var text = request.body.text.toLowerCase();
 
 	if(text.indexOf('i challenge') > -1) {
+    redis.newMatch(userName, 'target');
 		response.send(buildResponse("Rock, Paper, Scissors, SHOOT!"));
-		console.log(request.body.text.toLowerCase());
 	} else if (text.indexOf('rock') > -1) {
-		response.send(buildResponse('You chose rock'));
+    return redis.Shoot(userName, 'target', 'paper', null)
 	} else if (text.indexOf('paper') > -1) {
 		response.send(buildResponse('You chose paper'));
 	} else if (text.indexOf('scissors') > -1) {
