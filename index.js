@@ -1,6 +1,6 @@
 var express = require('express'),
   bodyParser = require('body-parser'),
-  redis = require('redis.js'),
+  redis = require('./redis.js'),
   app = express();
 
 app.set('port', (process.env.PORT || 5000));
