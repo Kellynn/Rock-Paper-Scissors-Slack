@@ -21,8 +21,6 @@ app.get('/cool', function(request, response) {
 });
 
 app.post('/commands', function(request, response) {
-  console.log(request);
-
   var userName = request.body.user_name;
   var text = request.body.text.toLowerCase();
 
@@ -30,7 +28,7 @@ app.post('/commands', function(request, response) {
     redis.newMatch(userName, 'target');
 		response.send(buildResponse("Rock, Paper, Scissors, SHOOT!"));
 	} else if (text.indexOf('rock') > -1) {
-    return redis.Shoot(userName, 'target', 'paper', null)
+    return redis.shoot(userName, 'target', 'paper', null)
 	} else if (text.indexOf('paper') > -1) {
 		response.send(buildResponse('You chose paper'));
 	} else if (text.indexOf('scissors') > -1) {
