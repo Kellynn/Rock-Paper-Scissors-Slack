@@ -24,7 +24,8 @@ app.post('/commands', function(request, response) {
   console.log(request);
 
   var userName = request.body.user_name;
-  response.send(buildResponse(userName));
+  var text = request.body.text;
+  response.send(buildResponse(text));
 
 	if(commands.indexOf('I challenge') > -1) {
 		response.send(buildResponse("Rock, Paper, Scissors, SHOOT!"));
