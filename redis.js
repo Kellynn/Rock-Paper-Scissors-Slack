@@ -63,7 +63,7 @@ module.exports.shoot = function(playerName, targetName, playersChoice, targetsCh
 	        		"targetsChoice" : targetsChoice
 	        	});
 	        	var results = QRedis.get(playerName);
-	        	console.log(results.playersChoice);
+	        	console.log(results[2]);
 	        	return QRedis.get(playerName);
 	        }
 	      } else {
