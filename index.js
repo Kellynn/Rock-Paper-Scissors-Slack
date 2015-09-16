@@ -12,14 +12,25 @@ app.set('view engine', 'ejs');
 
 app.get('/', function(request, response) {
   response.send('Hello There!');
-});
+});index
 
 app.get('/cool', function(request, response) {
   response.send(cool());
 });
 
 app.post('/commands', function(request, response) {
-	response.send(buildResponse('IT\'S WORKING'));
+	var commands = request.body.text.toLowerCase().split(" ");
+
+	if(matchCommands(commands, "CHALLENGE")) {
+		response.send(buildResponse("Rock, Paper, Scissors, SHOOT!"));
+		console.log(request.body.text.toLowerCase());
+  	} else if (matchCommands, "ROCK") {
+  		// player shoots rock
+  	} else if (matchCommands, "PAPER") {
+  		// player shoots paper
+  	} else if (matchCommands, "scissors") {
+  		// player shoots scissors
+  	}
 });
 
 app.listen(app.get('port'), function() {
@@ -32,7 +43,23 @@ app.listen(app.get('port'), function() {
 function buildResponse(text) {
   var json = {
     "text": text,
-    "username": "CraftBot"
+    "username": "BeepBoop"
   }
   return JSON.stringify(json);
+}
+
+/*
+* Helper function to match commands, instead of a switch statement,
+* because then you can do stuff like use Regex here or something fancier.
+* Also keeps all the possible commands and their trigger words in one place.
+*/
+function matchCommands(commandArray, command) {
+  var commandsDict = {
+    "CHALLENGE": "I challenge",
+    "PAPER": "paper",
+    "ROCK" : "rock",
+    "SCISSORS" : "scissors"
+  }
+  var cmdString = commandArray.join(" ").toLowerCase().replace("rps ", "");
+  return cmdString.indexOf(commandsDict[command]) === 0;
 }
