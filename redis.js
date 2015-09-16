@@ -63,3 +63,14 @@ module.exports.shoot = function(playerName, targetName, playersChoice, targetsCh
 	    }
     })	
 }
+
+module.exports.delete = function(playerName) {
+	return QRedis.exists(playerName)
+	    .then(function(exists){
+	      if(exists) {
+	      	return QRedis.del(playerName);
+	      } else {
+	        throw new Error("No match by that player found");
+	    }
+    })	
+}
