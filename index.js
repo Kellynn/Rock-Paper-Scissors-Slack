@@ -1,6 +1,8 @@
-var cool = require('cool-ascii-faces');
-var express = require('express');
-var app = express();
+var express = require('express'),
+  slack = require('slack-client'),
+  bodyParser = require('body-parser'),
+  redis = require('redis.js'),
+  app = express();
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -21,6 +23,7 @@ app.get('/cool', function(request, response) {
 app.post('/commands', function(request, response) {
   console.log(request);
 	var commands = request.body;
+  console.log(commands);
 
 	if(commands.indexOf('I challenge') > -1) {
 		response.send(buildResponse("Rock, Paper, Scissors, SHOOT!"));
