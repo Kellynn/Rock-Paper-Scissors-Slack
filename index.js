@@ -19,9 +19,7 @@ app.get('/cool', function(request, response) {
 });
 
 app.post('/commands', function(request, response) {
-  response.send(buildResponse('Test'));
 	var commands = request.body.text.toLowerCase().split(" ");
-	console.log(commands);
 
 	if(matchCommands(commands, "CHALLENGE")) {
 		response.send(buildResponse("Rock, Paper, Scissors, SHOOT!"));
