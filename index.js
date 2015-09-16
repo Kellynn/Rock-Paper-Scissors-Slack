@@ -19,10 +19,10 @@ app.get('/cool', function(request, response) {
 });
 
 app.post('/commands', function(request, response) {
-	var commands = request.body.toLowerCase();
+  console.log(request);
+	var commands = request.body;
 
-
-	if(commands.indexOf('i challenge') > -1) {
+	if(commands.indexOf('I challenge') > -1) {
 		response.send(buildResponse("Rock, Paper, Scissors, SHOOT!"));
 		console.log(request.body.text.toLowerCase());
 	} else if (commands.indexOf('rock') > -1) {
