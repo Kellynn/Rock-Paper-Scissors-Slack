@@ -45,7 +45,6 @@ app.listen(app.get('port'), function() {
 function buildResponse(text) {
   var json = {
     "text": text,
-    "username": "BeepBoop"
   }
   return JSON.stringify(json);
 }
