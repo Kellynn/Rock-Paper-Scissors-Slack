@@ -49,7 +49,7 @@ module.exports.shoot = function(playerName, targetName, playersChoice, targetsCh
 	    .then(function(exists){
 	      if(exists) {
 	        if (QRedis.get(playerName)) {
-	        	QRedis.hmset(playerName {
+	        	QRedis.hmset(playerName, {
 	        		"targetName" : targetName,
 	        		"playersChoice" : playersChoice,
 	        		"targetsChoice" : targetsChoice
