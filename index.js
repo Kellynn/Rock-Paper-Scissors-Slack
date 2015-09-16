@@ -19,18 +19,19 @@ app.get('/cool', function(request, response) {
 });
 
 app.post('/commands', function(request, response) {
-	var commands = request.body.text.toLowerCase().split(" ");
+	var commands = request.body.toLowerCase();
 
-	if(matchCommands(commands, "CHALLENGE")) {
+
+	if(commands.indexOf('i challenge') > -1) {
 		response.send(buildResponse("Rock, Paper, Scissors, SHOOT!"));
 		console.log(request.body.text.toLowerCase());
-  	} else if (matchCommands, "ROCK") {
-  		// player shoots rock
-  	} else if (matchCommands, "PAPER") {
-  		// player shoots paper
-  	} else if (matchCommands, "scissors") {
-  		// player shoots scissors
-  	}
+	} else if (commands.indexOf('rock') > -1) {
+		response.send(buildResponse('You chose rock'));
+	} else if (commands.indexOf('paper') > -1) {
+		response.send(buildResponse('You chose paper'));
+	} else if (commands.indexOf('scissors') > -1) {
+		response.send(buildResponse('You chose scissors'));
+	}
 });
 
 app.listen(app.get('port'), function() {
