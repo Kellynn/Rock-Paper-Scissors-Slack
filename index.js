@@ -22,10 +22,8 @@ app.get('/cool', function(request, response) {
 
 app.post('/commands', function(request, response) {
   console.log(request);
-	var commands = request.body;
-  console.log(commands);
 
-  var userName = req.body.user_name;
+  var userName = request.body.user_name;
   response.send(buildResponse(userName));
 
 	if(commands.indexOf('I challenge') > -1) {
