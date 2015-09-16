@@ -21,6 +21,7 @@ QRedis = {};
 
 QRedis.sadd = Q.nbind(redis.sadd, redis);
 QRedis.hmset = Q.nbind(redis.hmset, redis);
+QRedis.hget = Q.nbind(redis.hget, redis);
 QRedis.hgetall = Q.nbind(redis.hgetall, redis);
 QRedis.exists = Q.nbind(redis.exists, redis);
 QRedis.del = Q.nbind(redis.del, redis);
@@ -62,8 +63,8 @@ module.exports.shoot = function(playerName, targetName, playersChoice, targetsCh
 	        		"playersChoice" : playersChoice,
 	        		"targetsChoice" : targetsChoice
 	        	});
-	        	var results = QRedis.get(playerName);
-	        	console.log('The result' + results);
+	        	var results = QRedis.hget(playerName);
+	        	console.log('The result ' + results);
 	        	return QRedis.get(playerName);
 	        }
 	      } else {
