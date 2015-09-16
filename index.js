@@ -3,7 +3,7 @@ var express = require('express'),
   redis = require('./redis.js'),
   app = express();
 
-var port = process.env.PORT || 1337;
+app.set('port', (process.env.PORT || 5000));
  
 // body parser middleware
 app.use(bodyParser.urlencoded({ extended: true }));
