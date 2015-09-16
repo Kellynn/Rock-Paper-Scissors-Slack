@@ -62,7 +62,8 @@ module.exports.shoot = function(playerName, targetName, playersChoice, targetsCh
 	        	return QRedis.get(playerName);
 	        }
 	      } else {
-	        throw new Error("Start a new match: 'rps I challenge ____'");
+	        ret = "Start a new match: 'rps I challenge ____'";
+	        return ret;
 	    }
     })	
 }
