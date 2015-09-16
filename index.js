@@ -21,6 +21,7 @@ app.get('/cool', function(request, response) {
 app.post('/commands', function(request, response) {
   console.log(request);
 	var commands = request.body;
+  console.log(commands);
 
 	if(commands.indexOf('I challenge') > -1) {
 		response.send(buildResponse("Rock, Paper, Scissors, SHOOT!"));
