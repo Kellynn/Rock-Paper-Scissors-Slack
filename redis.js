@@ -37,13 +37,15 @@ module.exports.newMatch = function(playerName, targetName) {
 	return QRedis.exists(playerName)
 	    .then(function(exists){
 	      if(!exists) {
+	      	console.log('added new player');
 	        return QRedis.hmset(playerName, {
 	        	"targetName" : targetName,
 	        	"playersChoice" : null,
 	        	"targetsChoice" : null
-	        })
+	        });
 	      } else {
 	      	ret = "You are already in a Match";
+	      	console.log('already in a match');
 	        return ret;
 	    }
     })	
@@ -54,6 +56,7 @@ module.exports.shoot = function(playerName, targetName, playersChoice, targetsCh
 	    .then(function(exists){
 	      if(exists) {
 	        if (QRedis.get(playerName)) {
+	        	console.log('shoot');
 	        	QRedis.hmset(playerName, {
 	        		"targetName" : targetName,
 	        		"playersChoice" : playersChoice,
@@ -62,6 +65,7 @@ module.exports.shoot = function(playerName, targetName, playersChoice, targetsCh
 	        	return QRedis.get(playerName);
 	        }
 	      } else {
+	      	console.log('a new match needs to be started');
 	        ret = "Start a new match: 'rps I challenge ____'";
 	        return ret;
 	    }
@@ -72,8 +76,10 @@ module.exports.del = function(playerName) {
 	return QRedis.exists(playerName)
 	    .then(function(exists){
 	      if(exists) {
-	      	return QRedis.del(playerName)
+	      	console.log('key deleted');
+	      	return QRedis.del(playerName);
 	      } else {
+	      	console.log('nothing to delete');
 	        throw new Error("No match by that player found");
 	    }
     })	
