@@ -31,6 +31,8 @@ QRedis.smembers = Q.nbind(redis.smembers, redis);
 
 module.exports = {};
 
+var ret = null;
+
 module.exports.newMatch = function(playerName, targetName) {
 	return QRedis.exists(playerName)
 	    .then(function(exists){
@@ -41,7 +43,8 @@ module.exports.newMatch = function(playerName, targetName) {
 	        	"targetsChoice" : null
 	        })
 	      } else {
-	        throw new Error("You are already in a Match");
+	      	ret = "You are already in a Match";
+	        return ret;
 	    }
     })	
 }
