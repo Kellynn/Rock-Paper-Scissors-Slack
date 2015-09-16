@@ -3,13 +3,14 @@ var express = require('express'),
   redis = require('./redis.js'),
   app = express();
 
-app.set('port', (process.env.PORT || 5000));
-
-app.use(express.static(__dirname + '/public'));
+var port = process.env.PORT || 1337;
+ 
+// body parser middleware
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // views is directory for all template files
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
+// app.set('views', __dirname + '/views');
+// app.set('view engine', 'ejs');
 
 app.get('/', function(request, response) {
   response.send('Hello There!');
@@ -23,6 +24,9 @@ app.post('/commands', function(request, response) {
   console.log(request);
 	var commands = request.body;
   console.log(commands);
+
+  var userName = req.body.user_name;
+  response.send(buildResponse(userName));
 
 	if(commands.indexOf('I challenge') > -1) {
 		response.send(buildResponse("Rock, Paper, Scissors, SHOOT!"));
