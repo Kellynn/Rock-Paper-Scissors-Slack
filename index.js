@@ -24,17 +24,16 @@ app.post('/commands', function(request, response) {
   console.log(request);
 
   var userName = request.body.user_name;
-  var text = request.body.text;
-  response.send(buildResponse('LOL'));
+  var text = request.body.text.toLowerCase();
 
-	if(commands.indexOf('I challenge') > -1) {
+	if(text.indexOf('i challenge') > -1) {
 		response.send(buildResponse("Rock, Paper, Scissors, SHOOT!"));
 		console.log(request.body.text.toLowerCase());
-	} else if (commands.indexOf('rock') > -1) {
+	} else if (text.indexOf('rock') > -1) {
 		response.send(buildResponse('You chose rock'));
-	} else if (commands.indexOf('paper') > -1) {
+	} else if (text.indexOf('paper') > -1) {
 		response.send(buildResponse('You chose paper'));
-	} else if (commands.indexOf('scissors') > -1) {
+	} else if (text.indexOf('scissors') > -1) {
 		response.send(buildResponse('You chose scissors'));
 	}
 });
