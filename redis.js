@@ -34,9 +34,20 @@ module.exports = {};
 var ret = null;
 
 module.exports.newMatch = function(playerName, targetName) {
-	console.log('Exists = ' + redis.exists(playerName));
-	console.log('Get = ' + redis.get(playerName));
-	if ( !redis.exists(playerName) ) {
+	var a, b;
+	QRedis.exists(playerName)
+    .then(function(exists){
+      if(!exists) {
+        a = 'no person found';
+      } else {
+        b = 'something exists';
+      }
+    })
+
+	console.log('a = ' + a);
+	console.log('b = ' + b);
+	
+	if (redis.exists(playerName)) {
 		console.log('added new player');
       	// create a running game for the player who started the match
       	var success = redis.hmset(playerName, {
