@@ -60,50 +60,91 @@ module.exports.newMatch = function(playerName, targetName) {
     })	
 }
 
+// module.exports.shoot = function(playerName, playersChoice) {
+// 	return QRedis.exists(playerName)
+// 	    .then(function(exists){
+// 	      if(exists) {
+// 	        if (QRedis.get(playerName)) {
+// 	        	console.log('shoot');
+// 	        	var targetName = null, targetsChoice = null;
+
+// 	        	// get your game
+// 	   			redis.hgetall(playerName, function (err, results) {
+//         			   if (err) {
+// 					       // do something like callback(err) or whatever
+// 					   } else {
+// 					      // do something with results
+// 					      targetName = results.targetName;
+// 					      targetsChoice = results.targetsChoice
+// 					      console.log('Results: ' + results);
+// 					      console.log(results.targetName);
+// 					   }
+//     			});
+
+//     			// set your choice
+// 	        	redis.hmset(playerName, {
+// 	        		"targetName" : targetName,
+// 	        		"playersChoice" : playersChoice,
+// 	        		"targetsChoice" : targetsChoice
+// 	        	});
+
+// 	        	console.log('playersChoice: ' + playersChoice);
+
+// 	        	// if both choices are filled in, return who won
+// 	        	if (playersChoice !== null && targetsChoice !== null) {
+// 	        		console.log('Someone won');
+// 	        		return 'Someone won';
+// 	        	}
+// 	   			console.log('Info: ' + info);
+// 	   			return playerName;
+// 	        }
+// 	      } else {
+// 	      	console.log('a new match needs to be started');
+// 	        ret = "Start a new match: 'rps I challenge ____'";
+// 	        return ret;
+// 	    }
+//     })	
+// }
+
 module.exports.shoot = function(playerName, playersChoice) {
-	return QRedis.exists(playerName)
-	    .then(function(exists){
-	      if(exists) {
-	        if (QRedis.get(playerName)) {
-	        	console.log('shoot');
-	        	var targetName = null, targetsChoice = null;
+	if ( QRedis.exists(playerName) ) {
+        console.log('shoot');
+        var targetName = null, targetsChoice = null;
 
-	        	// get your game
-	   			redis.hgetall(playerName, function (err, results) {
-        			   if (err) {
-					       // do something like callback(err) or whatever
-					   } else {
-					      // do something with results
-					      targetName = results.targetName;
-					      targetsChoice = results.targetsChoice
-					      console.log('Results: ' + results);
-					      console.log(results.targetName);
-					   }
-    			});
+    	// get your game
+			redis.hgetall(playerName, function (err, results) {
+			   if (err) {
+			       // do something like callback(err) or whatever
+			   } else {
+			      // do something with results
+			      targetName = results.targetName;
+			      targetsChoice = results.targetsChoice
+			      console.log('Results: ' + results);
+			      console.log(results.targetName);
+			   }
+		});
 
-    			// set your choice
-	        	redis.hmset(playerName, {
-	        		"targetName" : targetName,
-	        		"playersChoice" : playersChoice,
-	        		"targetsChoice" : targetsChoice
-	        	});
+		// set your choice
+    	redis.hmset(playerName, {
+    		"targetName" : targetName,
+    		"playersChoice" : playersChoice,
+    		"targetsChoice" : targetsChoice
+    	});
 
-	        	console.log('playersChoice: ' + playersChoice);
+    	console.log('playersChoice: ' + playersChoice);
 
-	        	// if both choices are filled in, return who won
-	        	if (playersChoice !== null && targetsChoice !== null) {
-	        		console.log('Someone won');
-	        		return 'Someone won';
-	        	}
-	   			console.log('Info: ' + info);
-	   			return playerName;
-	        }
-	      } else {
-	      	console.log('a new match needs to be started');
-	        ret = "Start a new match: 'rps I challenge ____'";
-	        return ret;
-	    }
-    })	
+    	// if both choices are filled in, return who won
+    	if (playersChoice !== null && targetsChoice !== null) {
+    		console.log('Someone won');
+    		return 'Someone won';
+    	}
+			console.log('Info: ' + info);
+			return playerName;
+    } else {
+      	console.log('a new match needs to be started');
+        ret = "Start a new match: 'rps I challenge ____'";
+        return ret;
+    }
 }
 
 module.exports.del = function(playerName) {
