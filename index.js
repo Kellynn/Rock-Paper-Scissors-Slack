@@ -61,7 +61,7 @@ function gameBot(playerName) {
 function buildResponse(text) {
   var json = {
     "text": text,
-    "username" : GameBot
+    "username" : "gameBot"
   }
   return JSON.stringify(json);
 }
