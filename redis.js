@@ -85,23 +85,23 @@ module.exports.shoot = function(playerName, playersChoice) {
 		    	// do something with results
 		    	console.log("1: " + results.targetName);
 		    	targetName = results.targetName;
+
+		    	// see if your target has chosen something yet
+				if (targetName) {
+					console.log("Checking for targets choice");
+					redis.hgetall(targetName, function (err, results) {
+						if (err) {
+							console.log('There was an error');
+						} else {
+							console.log("2: " + results);
+							if (results.playersChoice) {
+								targetsChoice = results.playersChoice;
+							}
+						}
+					})
+				}
 		   }
 		});
-
-		// see if your target has chosen something yet
-		if (targetName) {
-			console.log("Checking for targets choice");
-			redis.hgetall(targetName, function (err, results) {
-				if (err) {
-					console.log('There was an error');
-				} else {
-					console.log("2: " + results);
-					if (results.playersChoice) {
-						targetsChoice = results.playersChoice;
-					}
-				}
-			})
-		}
 
 		// set your choice
     	redis.hmset(playerName, {
