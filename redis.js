@@ -82,6 +82,7 @@ module.exports.shoot = function(playerName, playersChoice) {
 		   		console.log('There was an error in hgetall in shoot');
 		   } else {
 		    	// do something with results
+		    	console.log("1: " + results);
 		    	targetName = results.targetName;
 		   }
 		});
@@ -92,6 +93,7 @@ module.exports.shoot = function(playerName, playersChoice) {
 				console.log('There was an error');
 			} else {
 				if (results && results.playersChoice) {
+					console.log("2: " + results);
 					targetsChoice = results.playersChoice;
 				}
 			}
