@@ -64,24 +64,17 @@ module.exports.shoot = function(playerName, targetName, playersChoice, targetsCh
 	        		"playersChoice" : playersChoice,
 	        		"targetsChoice" : targetsChoice
 	        	});
-	   //      	console.log('1: ' + redis.lrange(playerName, 0, 1));
-	   //      	// console.log('2: ' + redis.hget(playerName, "targetName"));
-	   //      	// console.log('3: ' + redis.hmget(playerName, "targetName"));
-	   //      	// console.log('4: ' + redis.hgetall(playerName));
-	   //      	var results = QRedis.hgetall(playerName, function(err, object) {
-    // 				console.log(object);
-				// });
-	   //      	// console.log('The result ' + results[targetName]);
-	   //      	// console.log('The result or ' + results['targetName']);
-	   //      	// console.log('The other results ' + results[0][0]);
-	   //      	// console.log('The maybe results ' + results.targetName);
-	   //      	// console.log('What about this' + results[0]);
-	   //      	// console.log(results);
-	   //      	// console.log(playerName);
-	   //      	return QRedis.get(playerName);
-	   			var info = redis.hgetall(playerName);
+	   			redis.hgetall(playerName, function (err, results) {
+        			   if (err) {
+					       // do something like callback(err) or whatever
+					   } else {
+					      // do something with results
+					      var info = results;
+					      console.log(results)
+					   }
+    			});
 	   			console.log('Info: ' + info);
-	   			return info;
+	   			return results;
 	        }
 	      } else {
 	      	console.log('a new match needs to be started');
