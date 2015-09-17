@@ -57,7 +57,6 @@ module.exports.shoot = function(playerName, targetName, playersChoice, targetsCh
 	    .then(function(exists){
 	      if(exists) {
 	        if (QRedis.get(playerName)) {
-	        	console.log('are you updating');
 	        	console.log('shoot');
 	        	QRedis.hmset(playerName, {
 	        		"targetName" : targetName,
@@ -67,9 +66,11 @@ module.exports.shoot = function(playerName, targetName, playersChoice, targetsCh
 	        	var results = QRedis.hget(playerName);
 	        	console.log('The result ' + results[targetName]);
 	        	console.log('The result or ' + results['targetName']);
-	        	var results2 = QRedis.hmgetall(playerName);
-	        	console.log('All the results ' + results2);
-	        	console.log('why u not working');
+	        	console.log('The other results ' + results[0][0]);
+	        	console.log('The maybe results ' + results.targetName);
+	        	console.log('What about this' + results[0]);
+	        	console.log(results);
+	        	console.log(playerName);
 	        	return QRedis.get(playerName);
 	        }
 	      } else {
