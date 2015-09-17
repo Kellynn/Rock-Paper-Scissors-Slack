@@ -133,6 +133,16 @@ module.exports.shoot = function(playerName, playersChoice) {
 
     	// if both choices are filled in, return who won
     	if (playersChoice !== null && targetsChoice !== null) {
+    		if (playersChoice === targetsChoice) {
+    			return 'It\'s a tie!';
+    		} else if (playersChoice == 'paper' && targetsChoice == 'rock'
+    			|| playersChoice == 'rock' && targetsChoice == 'scissors'
+    			|| playersChoice == 'scissors' && targetsChoice) {
+    			return playerName + 'Wins!';
+
+    		} else {
+    			return targetName + "Wins!";
+    		}
     		console.log('Someone won');
     		return 'Someone won';
     	} else {
