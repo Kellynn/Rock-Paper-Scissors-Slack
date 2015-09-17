@@ -24,23 +24,29 @@ app.post('/commands', function(request, response) {
   var userName = request.body.user_name;
   var text = request.body.text.toLowerCase();
 
-	if(text.indexOf('i challenge') > -1) {
+	if (text.indexOf('i challenge gamebot') > -1) {
+    return response.send(gamebot(playerName));
+  } else if(text.indexOf('i challenge') > -1) {
     redis.newMatch(userName, 'target');
 		response.send(buildResponse("Rock, Paper, Scissors, SHOOT!"));
 	} else if (text.indexOf('rock') > -1) {
     response.send(buildResponse(redis.shoot(userName, 'target', 'rock', null)));
 	} else if (text.indexOf('paper') > -1) {
-		response.send(buildResponse('You chose paper'));
+		response.send(buildResponse(redis.shoot(userName, 'target', 'paper', null)));
 	} else if (text.indexOf('scissors') > -1) {
 		response.send(buildResponse('You chose scissors'));
 	} else if (text.indexOf('delete') > -1) {
-    response.send(buildResponse(redis.del(userName)));
+    response.send(buildResponse(redis.shoot(userName, 'target', 'scissors', null)));
   }
 });
 
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
+
+function gameBot(playerName) {
+  return buildResponse('Gamebot doesn\'t want to play right now');
+}
 
 /*
 * Helper function to build the JSON to send back to Slack.

@@ -38,8 +38,15 @@ module.exports.newMatch = function(playerName, targetName) {
 	    .then(function(exists){
 	      if(!exists) {
 	      	console.log('added new player');
+	      	// create a running game for the player who started the match
 	      	var success = redis.hmset(playerName, {
 	      		"targetName" : targetName,
+	      		"playersChoice" : "not chosen",
+	      		"targetsChoice" : "not chosen"
+	      	});
+	      	// create a running game for the targeted player
+	      	redis.hmset(targetName, {
+	      		"targetName" : playerName,
 	      		"playersChoice" : "not chosen",
 	      		"targetsChoice" : "not chosen"
 	      	});
@@ -70,7 +77,9 @@ module.exports.shoot = function(playerName, targetName, playersChoice, targetsCh
 					   } else {
 					      // do something with results
 					      var info = results;
-					      console.log(results)
+					      console.log(results[0]);
+					      console.log(results.targetName);
+					      console.log(results["targetName"]);
 					   }
     			});
 	   			console.log('Info: ' + info);
