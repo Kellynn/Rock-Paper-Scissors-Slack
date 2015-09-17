@@ -44,9 +44,9 @@ module.exports.newMatch = function(playerName, targetName) {
       }
     })
 
-	console.log('a = ' + a);
-	console.log('b = ' + b);
-	
+	// console.log('a = ' + a);
+	// console.log('b = ' + b);
+
 	if (redis.exists(playerName)) {
 		console.log('added new player');
       	// create a running game for the player who started the match
@@ -83,11 +83,17 @@ module.exports.shoot = function(playerName, playersChoice) {
 		   } else {
 		    	// do something with results
 		    	targetName = results.targetName;
-		    	targetsChoice = results.targetsChoice
-		    	console.log('Results: ' + results);
-		    	console.log('Target name: ' + results.targetName);
 		   }
 		});
+
+		// see if your target has chosen something yet
+		redis.hgetall(targetName, function (err, results) {
+			if (err) {
+				console.log('There was an error');
+			} else {
+				targetsChoice = results.playersChoice;
+			}
+		})
 
 		// set your choice
     	redis.hmset(playerName, {
@@ -95,6 +101,9 @@ module.exports.shoot = function(playerName, playersChoice) {
     		"playersChoice" : playersChoice,
     		"targetsChoice" : targetsChoice
     	});
+
+    	console.log("playersChoice: " + playersChoice);
+    	console.log("targetsChoice: " + targetsChoice);
 
     	// if both choices are filled in, return who won
     	if (playersChoice !== null && targetsChoice !== null) {
