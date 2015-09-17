@@ -28,19 +28,15 @@ app.post('/commands', function(request, response) {
 	if (text.indexOf('i challenge gamebot') > -1) {
     return response.send(gameBot(playerName));
   } else if(text.indexOf('i challenge') > -1) {
-    var start = redis.newMatch(userName, target[3]);
-		response.send(buildResponse(start));
+		response.send(buildResponse("Why don't you challenge GameBot?"));
 	} else if (text.indexOf('rock') > -1) {
     var rock = redis.shoot(userName, 'rock');
-    console.log('rock return from redis: ' + rock);
     response.send(buildResponse(rock));
 	} else if (text.indexOf('paper') > -1) {
 		var paper = redis.shoot(userName, 'paper');
-    console.log('paper return from redis: ' + paper);
     response.send(buildResponse(paper));
 	} else if (text.indexOf('scissors') > -1) {
     var scissors = redis.shoot(userName, 'scissors');
-    console.log('scissors return from redis: ' + scissors);
     response.send(buildResponse(paper));
 	} else if (text.indexOf('delete') > -1) {
     response.send(buildResponse(redis.del(userName)));
@@ -52,7 +48,8 @@ app.listen(app.get('port'), function() {
 });
 
 function gameBot(playerName) {
-  return buildResponse('Gamebot doesn\'t want to play right now');
+  redis.newMatch(playerName);
+  return buildResponse('Rock, Paper, Scissors, SHOOT!');
 }
 
 /*
@@ -61,7 +58,7 @@ function gameBot(playerName) {
 function buildResponse(text) {
   var json = {
     "text": text,
-    "username" : "gameBot"
+    "username" : "GameBot"
   }
   return JSON.stringify(json);
 }
