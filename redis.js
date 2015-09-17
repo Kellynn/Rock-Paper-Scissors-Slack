@@ -120,9 +120,7 @@ module.exports.shoot = function(playerName, playersChoice) {
 			      targetName = results.targetName;
 			      targetsChoice = results.targetsChoice
 			      console.log('Results: ' + results);
-			      console.log(results.targetName);
-			      console.log(results['targetName']);
-			      console.log(results[0]);
+			      console.log('Target name: ' + results.targetName);
 			   }
 		});
 
@@ -133,15 +131,13 @@ module.exports.shoot = function(playerName, playersChoice) {
     		"targetsChoice" : targetsChoice
     	});
 
-    	console.log('playersChoice: ' + playersChoice);
-
     	// if both choices are filled in, return who won
     	if (playersChoice !== null && targetsChoice !== null) {
     		console.log('Someone won');
     		return 'Someone won';
-    	}
-			console.log('Info: ' + info);
+    	} else {
 			return playerName;
+    	}
     } else {
       	console.log('a new match needs to be started');
         ret = "Start a new match: 'rps I challenge ____'";
