@@ -91,7 +91,7 @@ module.exports.shoot = function(playerName, playersChoice) {
 	        	console.log('playersChoice: ' + playersChoice);
 
 	        	// if both choices are filled in, return who won
-	        	if (playersChoice !=== null && targetsChoice !=== null) {
+	        	if (playersChoice !== null && targetsChoice !== null) {
 	        		console.log('Someone won');
 	        		return 'Someone won';
 	        	}
