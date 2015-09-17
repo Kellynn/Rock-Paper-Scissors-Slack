@@ -84,52 +84,54 @@ module.exports.shoot = function(playerName, playersChoice) {
 		    	// do something with results
 		    	console.log("1: " + results);
 		    	targetName = results.targetName;
+
+		    	// see if your target has chosen something yet
+				redis.hgetall(targetName, function (err, results) {
+					if (err) {
+						console.log('There was an error');
+					} else {
+						console.log("2: " + results);
+						if (results.playersChoice) {
+							targetsChoice = results.playersChoice;
+						}
+
+						// set your choice
+				    	redis.hmset(playerName, {
+				    		"targetName" : targetName,
+				    		"playersChoice" : playersChoice,
+				    		"targetsChoice" : targetsChoice
+				    	});
+
+				    	console.log("playersChoice: " + playersChoice);
+				    	console.log("targetsChoice: " + targetsChoice);
+
+				    	// if both choices are filled in, return who won
+				    	if (playersChoice && targetsChoice) {
+				    		if (playersChoice === targetsChoice) {
+				    			redis.del(targetName);
+				    			redis.del(playerName);
+				    			return 'It\'s a tie!';
+				    		} else if (playersChoice == 'paper' && targetsChoice == 'rock'
+				    			|| playersChoice == 'rock' && targetsChoice == 'scissors'
+				    			|| playersChoice == 'scissors' && targetsChoice) {
+				    			redis.del(targetName);
+				    			redis.del(playerName);
+				    			return playerName + 'Wins!';
+
+				    		} else {
+				    			redis.del(targetName);
+				    			redis.del(playerName);
+				    			return targetName + "Wins!";
+				    		}
+				    	} else {
+							return 'Waiting for other player to shoot';
+				    	}
+					}
+				});
+
 		   }
 		});
 
-		// see if your target has chosen something yet
-		redis.hgetall(targetName, function (err, results) {
-			if (err) {
-				console.log('There was an error');
-			} else {
-				console.log("2: " + results);
-				if (results.playersChoice) {
-					targetsChoice = results.playersChoice;
-				}
-			}
-		})
-
-		// set your choice
-    	redis.hmset(playerName, {
-    		"targetName" : targetName,
-    		"playersChoice" : playersChoice,
-    		"targetsChoice" : targetsChoice
-    	});
-
-    	console.log("playersChoice: " + playersChoice);
-    	console.log("targetsChoice: " + targetsChoice);
-
-    	// if both choices are filled in, return who won
-    	if (playersChoice && targetsChoice) {
-    		if (playersChoice === targetsChoice) {
-    			redis.del(targetName);
-    			redis.del(playerName);
-    			return 'It\'s a tie!';
-    		} else if (playersChoice == 'paper' && targetsChoice == 'rock'
-    			|| playersChoice == 'rock' && targetsChoice == 'scissors'
-    			|| playersChoice == 'scissors' && targetsChoice) {
-    			redis.del(targetName);
-    			redis.del(playerName);
-    			return playerName + 'Wins!';
-
-    		} else {
-    			redis.del(targetName);
-    			redis.del(playerName);
-    			return targetName + "Wins!";
-    		}
-    	} else {
-			return 'Waiting for other player to shoot';
-    	}
     } else {
       	console.log('a new match needs to be started');
         ret = "Start a new match: 'rps I challenge ____'";
