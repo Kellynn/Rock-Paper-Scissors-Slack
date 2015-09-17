@@ -91,7 +91,9 @@ module.exports.shoot = function(playerName, playersChoice) {
 			if (err) {
 				console.log('There was an error');
 			} else {
-				targetsChoice = results.playersChoice;
+				if (results.playersChoice !== null) {
+					targetsChoice = results.playersChoice;
+				}
 			}
 		})
 
