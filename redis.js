@@ -48,7 +48,8 @@ module.exports.newMatch = function(playerName, targetName) {
 	// console.log('b = ' + b);
 
 	if (redis.exists(playerName)) {
-		console.log('added new player');
+		console.log('added new player: ' + playerName);
+		console.log('added new target: ' + targetName);
       	// create a running game for the player who started the match
       	var success = redis.hmset(playerName, {
       		"targetName" : targetName,
