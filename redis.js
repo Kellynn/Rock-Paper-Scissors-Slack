@@ -83,64 +83,66 @@ module.exports.shoot = function(playerName, playersChoice) {
 		   		console.log('There was an error in hgetall in shoot');
 		   } else {
 		    	// do something with results
-		    	console.log("1: " + results.targetName);
-		    	targetName = results.targetName;
+		    	if (results.targetName) {
+			    	console.log("1: " + results.targetName);
+			    	targetName = results.targetName;
 
-		    	// see if your target has chosen something yet
-				if (targetName) {
-					console.log("Checking for targets choice");
-					redis.hgetall(targetName, function (err, results) {
-						if (err) {
-							console.log('There was an error');
-						} else {
-							console.log("2: " + results);
-							if (results.playersChoice) {
-								// can obtain the other person's play
-								targetsChoice = results.playersChoice;
-
-								// set your choice
-						    	redis.hmset(playerName, {
-						    		"targetName" : targetName,
-						    		"playersChoice" : playersChoice,
-						    		"targetsChoice" : targetsChoice
-						    	});
-
-						    	console.log("playersChoice: " + playersChoice);
-						    	console.log("targetsChoice: " + targetsChoice);	
-
-						    	// if both choices are filled in, return who won
-						    	if (playersChoice && targetsChoice) {
-						    		if (playersChoice === targetsChoice) {
-						    			redis.del(targetName);
-						    			redis.del(playerName);
-						    			return 'It\'s a tie!';
-						    		} else if (playersChoice == 'paper' && targetsChoice == 'rock'
-						    			|| playersChoice == 'rock' && targetsChoice == 'scissors'
-						    			|| playersChoice == 'scissors' && targetsChoice) {
-						    			redis.del(targetName);
-						    			redis.del(playerName);
-						    			return playerName + 'Wins!';
-
-						    		} else {
-						    			redis.del(targetName);
-						    			redis.del(playerName);
-						    			return targetName + "Wins!";
-						    		}
-						    	}							
+			    	// see if your target has chosen something yet
+					if (targetName) {
+						console.log("Checking for targets choice");
+						redis.hgetall(targetName, function (err, results) {
+							if (err) {
+								console.log('There was an error');
 							} else {
-								// set your choice
-						    	redis.hmset(playerName, {
-						    		"targetName" : targetName,
-						    		"playersChoice" : playersChoice,
-						    		"targetsChoice" : targetsChoice
-						    	});
+								console.log("2: " + results);
+								if (results.playersChoice) {
+									// can obtain the other person's play
+									targetsChoice = results.playersChoice;
 
-								// player has not chosen yet
-								return "Waiting for other player to shoot";
+									// set your choice
+							    	redis.hmset(playerName, {
+							    		"targetName" : targetName,
+							    		"playersChoice" : playersChoice,
+							    		"targetsChoice" : targetsChoice
+							    	});
+
+							    	console.log("playersChoice: " + playersChoice);
+							    	console.log("targetsChoice: " + targetsChoice);	
+
+							    	// if both choices are filled in, return who won
+							    	if (playersChoice && targetsChoice) {
+							    		if (playersChoice === targetsChoice) {
+							    			redis.del(targetName);
+							    			redis.del(playerName);
+							    			return 'It\'s a tie!';
+							    		} else if (playersChoice == 'paper' && targetsChoice == 'rock'
+							    			|| playersChoice == 'rock' && targetsChoice == 'scissors'
+							    			|| playersChoice == 'scissors' && targetsChoice) {
+							    			redis.del(targetName);
+							    			redis.del(playerName);
+							    			return playerName + 'Wins!';
+
+							    		} else {
+							    			redis.del(targetName);
+							    			redis.del(playerName);
+							    			return targetName + "Wins!";
+							    		}
+							    	}							
+								} else {
+									// set your choice
+							    	redis.hmset(playerName, {
+							    		"targetName" : targetName,
+							    		"playersChoice" : playersChoice,
+							    		"targetsChoice" : targetsChoice
+							    	});
+
+									// player has not chosen yet
+									return "Waiting for other player to shoot";
+								}
 							}
-						}
-					})
-				}
+						})
+					}
+		    	}
 		   }
 		});
     } else {
