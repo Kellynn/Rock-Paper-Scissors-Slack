@@ -26,7 +26,7 @@ app.post('/commands', function(request, response) {
   var target = text.split(" ");
 
 	if (text.indexOf('i challenge gamebot') > -1) {
-    return response.send(gameBot(playerName));
+    return response.send(gameBot(userName));
   } else if(text.indexOf('i challenge') > -1) {
 		response.send(buildResponse("Why don't you challenge GameBot?"));
 	} else if (text.indexOf('rock') > -1) {
