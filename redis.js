@@ -67,6 +67,7 @@ module.exports.shoot = function(playerName, targetName, playersChoice, targetsCh
 	        	console.log('The result ' + results);
 	        	var results2 = QRedis.hmgetall(playerName);
 	        	console.log('All the results ' + results2);
+	        	console.log('why u not working');
 	        	return QRedis.get(playerName);
 	        }
 	      } else {
