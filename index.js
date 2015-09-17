@@ -31,7 +31,14 @@ app.post('/commands', function(request, response) {
     redis.newMatch(userName, target[3]);
 		response.send(buildResponse("Rock, Paper, Scissors, SHOOT!"));
 	} else if (text.indexOf('rock') > -1) {
-    var temp = redis.shoot(userName, 'rock');
+    var temp = null;
+    redis.shoot(userName, 'rock', function (err, results) {
+      if (err) {
+           // do something like callback(err) or whatever
+      } else {
+          temp = results;
+      }
+    });
     console.log('Return from redis: ' + temp);
     response.send(buildResponse(temp));
 	} else if (text.indexOf('paper') > -1) {
