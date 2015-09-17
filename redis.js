@@ -34,77 +34,29 @@ module.exports = {};
 var ret = null;
 
 module.exports.newMatch = function(playerName, targetName) {
-	return QRedis.exists(playerName)
-	    .then(function(exists){
-	      if(!exists) {
-	      	console.log('added new player');
-	      	// create a running game for the player who started the match
-	      	var success = redis.hmset(playerName, {
-	      		"targetName" : targetName,
-	      		"playersChoice" : "not chosen",
-	      		"targetsChoice" : "not chosen"
-	      	});
-	      	// create a running game for the targeted player
-	      	redis.hmset(targetName, {
-	      		"targetName" : playerName,
-	      		"playersChoice" : null,
-	      		"targetsChoice" : null
-	      	});
-	      	console.log(success);
-	        return success;
-	      } else {
-	      	ret = "You are already in a Match";
-	      	console.log('already in a match');
-	        return ret;
-	    }
-    })	
+	if ( !QRedis.exists(playerName) ) {
+		console.log('added new player');
+      	// create a running game for the player who started the match
+      	var success = redis.hmset(playerName, {
+      		"targetName" : targetName,
+      		"playersChoice" : "not chosen",
+      		"targetsChoice" : "not chosen"
+      	});
+      	// create a running game for the targeted player
+      	redis.hmset(targetName, {
+      		"targetName" : playerName,
+      		"playersChoice" : null,
+      		"targetsChoice" : null
+      	});
+
+      	// return message to tell users game started
+        return "Rock, Paper, Scissors, SHOOT!";
+     } else {
+      	ret = "You are already in a Match";
+      	console.log('already in a match');
+        return ret;
+    }	
 }
-
-// module.exports.shoot = function(playerName, playersChoice) {
-// 	return QRedis.exists(playerName)
-// 	    .then(function(exists){
-// 	      if(exists) {
-// 	        if (QRedis.get(playerName)) {
-// 	        	console.log('shoot');
-// 	        	var targetName = null, targetsChoice = null;
-
-// 	        	// get your game
-// 	   			redis.hgetall(playerName, function (err, results) {
-//         			   if (err) {
-// 					       // do something like callback(err) or whatever
-// 					   } else {
-// 					      // do something with results
-// 					      targetName = results.targetName;
-// 					      targetsChoice = results.targetsChoice
-// 					      console.log('Results: ' + results);
-// 					      console.log(results.targetName);
-// 					   }
-//     			});
-
-//     			// set your choice
-// 	        	redis.hmset(playerName, {
-// 	        		"targetName" : targetName,
-// 	        		"playersChoice" : playersChoice,
-// 	        		"targetsChoice" : targetsChoice
-// 	        	});
-
-// 	        	console.log('playersChoice: ' + playersChoice);
-
-// 	        	// if both choices are filled in, return who won
-// 	        	if (playersChoice !== null && targetsChoice !== null) {
-// 	        		console.log('Someone won');
-// 	        		return 'Someone won';
-// 	        	}
-// 	   			console.log('Info: ' + info);
-// 	   			return playerName;
-// 	        }
-// 	      } else {
-// 	      	console.log('a new match needs to be started');
-// 	        ret = "Start a new match: 'rps I challenge ____'";
-// 	        return ret;
-// 	    }
-//     })	
-// }
 
 module.exports.shoot = function(playerName, playersChoice) {
 	if ( QRedis.exists(playerName) ) {
@@ -112,16 +64,16 @@ module.exports.shoot = function(playerName, playersChoice) {
         var targetName = null, targetsChoice = null;
 
     	// get your game
-			redis.hgetall(playerName, function (err, results) {
-			   if (err) {
-			       // do something like callback(err) or whatever
-			   } else {
-			      // do something with results
-			      targetName = results.targetName;
-			      targetsChoice = results.targetsChoice
-			      console.log('Results: ' + results);
-			      console.log('Target name: ' + results.targetName);
-			   }
+		redis.hgetall(playerName, function (err, results) {
+		   if (err) {
+		   		console.log('There was an error in hgetall in shoot');
+		   } else {
+		    	// do something with results
+		    	targetName = results.targetName;
+		    	targetsChoice = results.targetsChoice
+		    	console.log('Results: ' + results);
+		    	console.log('Target name: ' + results.targetName);
+		   }
 		});
 
 		// set your choice
@@ -134,19 +86,23 @@ module.exports.shoot = function(playerName, playersChoice) {
     	// if both choices are filled in, return who won
     	if (playersChoice !== null && targetsChoice !== null) {
     		if (playersChoice === targetsChoice) {
+    			redis.del(targetName);
+    			redis.del(playerName);
     			return 'It\'s a tie!';
     		} else if (playersChoice == 'paper' && targetsChoice == 'rock'
     			|| playersChoice == 'rock' && targetsChoice == 'scissors'
     			|| playersChoice == 'scissors' && targetsChoice) {
+    			redis.del(targetName);
+    			redis.del(playerName);
     			return playerName + 'Wins!';
 
     		} else {
+    			redis.del(targetName);
+    			redis.del(playerName);
     			return targetName + "Wins!";
     		}
-    		console.log('Someone won');
-    		return 'Someone won';
     	} else {
-			return playerName;
+			return 'Waiting for other player to shoot';
     	}
     } else {
       	console.log('a new match needs to be started');
