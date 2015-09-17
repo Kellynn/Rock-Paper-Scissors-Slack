@@ -64,8 +64,8 @@ module.exports.shoot = function(playerName, targetName, playersChoice, targetsCh
 	        		"targetsChoice" : targetsChoice
 	        	});
 	        	var results = QRedis.hget(playerName);
-	        	console.log('The result ' + results[targetName]);
-	        	console.log('The result or ' + results['targetName']);
+	        	// console.log('The result ' + results[targetName]);
+	        	// console.log('The result or ' + results['targetName']);
 	        	console.log('The other results ' + results[0][0]);
 	        	console.log('The maybe results ' + results.targetName);
 	        	console.log('What about this' + results[0]);
