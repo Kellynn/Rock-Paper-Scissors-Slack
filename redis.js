@@ -83,6 +83,7 @@ module.exports.newMatch = function(playerName) {
 module.exports.shoot = function(playerName, playersChoice) {
 	// 1 == Rock, 2 == Paper, 3 = Scissors
 	var gameBot = getRandomNum(1, 3);
+	console.log(gameBot);
 
 	if (redis.get(playerName)) {
 		if (gameBot == 1 && playersChoice == 'Paper'
