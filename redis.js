@@ -86,9 +86,15 @@ module.exports.shoot = function(playerName, playersChoice) {
 	console.log(gameBot);
 
 	if (redis.get(playerName)) {
-		if (gameBot == 1 && playersChoice == 'Paper'
-			|| gameBot == 2 && playersChoice == 'Scissors'
-			|| gameBot == 3 && playersChoice == 'Rock') {
+		if (gameBot == 1 && playersChoice == 'rock'
+			|| gameBot == 2 && playersChoice == 'paper'
+			|| gameBot == 3 && playersChoice == 'scissors') {
+			QRedis.del(playerName);
+			return 'It\'s a tie! GameBot will win next time!';
+		}
+		if (gameBot == 1 && playersChoice == 'paper'
+			|| gameBot == 2 && playersChoice == 'scissors'
+			|| gameBot == 3 && playersChoice == 'rock') {
 			QRedis.del(playerName);
 			return 'You won! Congrats.';
 		} else {
