@@ -65,7 +65,8 @@ module.exports.shoot = function(playerName, targetName, playersChoice, targetsCh
 	        		"targetsChoice" : targetsChoice
 	        	});
 	        	var results = QRedis.hget(playerName);
-	        	console.log('The result ' + results);
+	        	console.log('The result ' + results[targetName]);
+	        	console.log('The result or ' + results['targetName']);
 	        	var results2 = QRedis.hmgetall(playerName);
 	        	console.log('All the results ' + results2);
 	        	console.log('why u not working');
