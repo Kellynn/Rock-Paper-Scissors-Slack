@@ -38,7 +38,11 @@ module.exports.newMatch = function(playerName, targetName) {
 	    .then(function(exists){
 	      if(!exists) {
 	      	console.log('added new player');
-	      	var success = redis.set(playerName, targetName);
+	      	var success = redis.hmset(playerName, {
+	      		"targetName" : targetName,
+	      		"playersChoice" : "not chosen",
+	      		"targetsChoice" : "not chosen"
+	      	});
 	      	console.log(success);
 	        return success;
 	      } else {
@@ -55,27 +59,29 @@ module.exports.shoot = function(playerName, targetName, playersChoice, targetsCh
 	      if(exists) {
 	        if (QRedis.get(playerName)) {
 	        	console.log('shoot');
-	        	redis.rpush(playerName, playersChoice);
-	        	// QRedis.hmset(playerName, {
-	        	// 	"targetName" : targetName,
-	        	// 	"playersChoice" : playersChoice,
-	        	// 	"targetsChoice" : targetsChoice
-	        	// });
-	        	console.log('1: ' + redis.lrange(playerName, 0, 1));
-	        	// console.log('2: ' + redis.hget(playerName, "targetName"));
-	        	// console.log('3: ' + redis.hmget(playerName, "targetName"));
-	        	// console.log('4: ' + redis.hgetall(playerName));
-	        	var results = QRedis.hgetall(playerName, function(err, object) {
-    				console.log(object);
-				});
-	        	// console.log('The result ' + results[targetName]);
-	        	// console.log('The result or ' + results['targetName']);
-	        	// console.log('The other results ' + results[0][0]);
-	        	// console.log('The maybe results ' + results.targetName);
-	        	// console.log('What about this' + results[0]);
-	        	// console.log(results);
-	        	// console.log(playerName);
-	        	return QRedis.get(playerName);
+	        	redis.hmset(playerName, {
+	        		"targetName" : targetName,
+	        		"playersChoice" : playersChoice,
+	        		"targetsChoice" : targetsChoice
+	        	});
+	   //      	console.log('1: ' + redis.lrange(playerName, 0, 1));
+	   //      	// console.log('2: ' + redis.hget(playerName, "targetName"));
+	   //      	// console.log('3: ' + redis.hmget(playerName, "targetName"));
+	   //      	// console.log('4: ' + redis.hgetall(playerName));
+	   //      	var results = QRedis.hgetall(playerName, function(err, object) {
+    // 				console.log(object);
+				// });
+	   //      	// console.log('The result ' + results[targetName]);
+	   //      	// console.log('The result or ' + results['targetName']);
+	   //      	// console.log('The other results ' + results[0][0]);
+	   //      	// console.log('The maybe results ' + results.targetName);
+	   //      	// console.log('What about this' + results[0]);
+	   //      	// console.log(results);
+	   //      	// console.log(playerName);
+	   //      	return QRedis.get(playerName);
+	   			var info = redis.hgetall(playerName);
+	   			console.log('Info: ' + info);
+	   			return info;
 	        }
 	      } else {
 	      	console.log('a new match needs to be started');
