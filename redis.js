@@ -91,7 +91,7 @@ module.exports.shoot = function(playerName, playersChoice) {
 			if (err) {
 				console.log('There was an error');
 			} else {
-				if (results.playersChoice !== null) {
+				if (results && results.playersChoice) {
 					targetsChoice = results.playersChoice;
 				}
 			}
@@ -108,7 +108,7 @@ module.exports.shoot = function(playerName, playersChoice) {
     	console.log("targetsChoice: " + targetsChoice);
 
     	// if both choices are filled in, return who won
-    	if (playersChoice !== null && targetsChoice !== null) {
+    	if (playersChoice && targetsChoice) {
     		if (playersChoice === targetsChoice) {
     			redis.del(targetName);
     			redis.del(playerName);
