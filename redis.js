@@ -57,6 +57,7 @@ module.exports.shoot = function(playerName, targetName, playersChoice, targetsCh
 	    .then(function(exists){
 	      if(exists) {
 	        if (QRedis.get(playerName)) {
+	        	console.log('are you updating');
 	        	console.log('shoot');
 	        	QRedis.hmset(playerName, {
 	        		"targetName" : targetName,
