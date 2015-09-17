@@ -34,7 +34,7 @@ module.exports = {};
 var ret = null;
 
 module.exports.newMatch = function(playerName, targetName) {
-	if ( !QRedis.exists(playerName) ) {
+	if ( !redis.exists(playerName) ) {
 		console.log('added new player');
       	// create a running game for the player who started the match
       	var success = redis.hmset(playerName, {
