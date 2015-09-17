@@ -47,8 +47,8 @@ module.exports.newMatch = function(playerName, targetName) {
 	      	// create a running game for the targeted player
 	      	redis.hmset(targetName, {
 	      		"targetName" : playerName,
-	      		"playersChoice" : "not chosen",
-	      		"targetsChoice" : "not chosen"
+	      		"playersChoice" : null,
+	      		"targetsChoice" : null
 	      	});
 	      	console.log(success);
 	        return success;
@@ -60,30 +60,43 @@ module.exports.newMatch = function(playerName, targetName) {
     })	
 }
 
-module.exports.shoot = function(playerName, targetName, playersChoice, targetsChoice) {
+module.exports.shoot = function(playerName, playersChoice) {
 	return QRedis.exists(playerName)
 	    .then(function(exists){
 	      if(exists) {
 	        if (QRedis.get(playerName)) {
 	        	console.log('shoot');
-	        	redis.hmset(playerName, {
-	        		"targetName" : targetName,
-	        		"playersChoice" : playersChoice,
-	        		"targetsChoice" : targetsChoice
-	        	});
+	        	var targetName = null, targetsChoice = null;
+
+	        	// get your game
 	   			redis.hgetall(playerName, function (err, results) {
         			   if (err) {
 					       // do something like callback(err) or whatever
 					   } else {
 					      // do something with results
-					      var info = results;
-					      console.log(results[0]);
+					      targetName = results.targetName;
+					      targetsChoice = results.targetsChoice
+					      console.log('Results: ' + results);
 					      console.log(results.targetName);
-					      console.log(results["targetName"]);
 					   }
     			});
+
+    			// set your choice
+	        	redis.hmset(playerName, {
+	        		"targetName" : targetName,
+	        		"playersChoice" : playersChoice,
+	        		"targetsChoice" : targetsChoice
+	        	});
+
+	        	console.log('playersChoice: ' + playersChoice);
+
+	        	// if both choices are filled in, return who won
+	        	if (playersChoice !=== null && targetsChoice !=== null) {
+	        		console.log('Someone won');
+	        		return 'Someone won';
+	        	}
 	   			console.log('Info: ' + info);
-	   			return results;
+	   			return playerName;
 	        }
 	      } else {
 	      	console.log('a new match needs to be started');
