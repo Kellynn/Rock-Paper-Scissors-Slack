@@ -63,8 +63,8 @@ module.exports.shoot = function(playerName, targetName, playersChoice, targetsCh
 	        		"targetsChoice" : targetsChoice
 	        	});
 	        	console.log('1: ' + redis.get(playerName));
-	        	console.log('2: ' + redis.hget(playerName));
-	        	console.log('3: ' + redis.hmget(playerName));
+	        	console.log('2: ' + redis.hget(playerName, "targetName"));
+	        	console.log('3: ' + redis.hmget(playerName, "targetName"));
 	        	console.log('4: ' + redis.hgetall(playerName));
 	        	var results = QRedis.hgetall(playerName, function(err, object) {
     				console.log(object);
