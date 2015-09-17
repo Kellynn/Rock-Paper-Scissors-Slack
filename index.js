@@ -29,7 +29,7 @@ app.post('/commands', function(request, response) {
     return response.send(gameBot(playerName));
   } else if(text.indexOf('i challenge') > -1) {
     var start = redis.newMatch(userName, target[3]);
-		response.send(buildResponse(start);
+		response.send(buildResponse(start));
 	} else if (text.indexOf('rock') > -1) {
     var rock = redis.shoot(userName, 'rock');
     console.log('rock return from redis: ' + rock);
