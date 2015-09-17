@@ -121,6 +121,8 @@ module.exports.shoot = function(playerName, playersChoice) {
 			      targetsChoice = results.targetsChoice
 			      console.log('Results: ' + results);
 			      console.log(results.targetName);
+			      console.log(results['targetName']);
+			      console.log(results[0]);
 			   }
 		});
 
