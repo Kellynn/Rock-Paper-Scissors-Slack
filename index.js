@@ -23,14 +23,17 @@ app.get('/cool', function(request, response) {
 app.post('/commands', function(request, response) {
   var userName = request.body.user_name;
   var text = request.body.text.toLowerCase();
+  var target = text.split(" ");
 
 	if (text.indexOf('i challenge gamebot') > -1) {
     return response.send(gamebot(playerName));
   } else if(text.indexOf('i challenge') > -1) {
-    redis.newMatch(userName, 'target');
+    redis.newMatch(userName, target[3]);
 		response.send(buildResponse("Rock, Paper, Scissors, SHOOT!"));
 	} else if (text.indexOf('rock') > -1) {
-    response.send(buildResponse(redis.shoot(userName, 'rock')));
+    var temp = redis.shoot(userName, 'rock');
+    console.log('Return from redis: ' + temp);
+    response.send(buildResponse(temp));
 	} else if (text.indexOf('paper') > -1) {
 		response.send(buildResponse(redis.shoot(userName, 'paper')));
 	} else if (text.indexOf('scissors') > -1) {
