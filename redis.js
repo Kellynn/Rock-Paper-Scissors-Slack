@@ -34,6 +34,8 @@ module.exports = {};
 var ret = null;
 
 module.exports.newMatch = function(playerName, targetName) {
+	console.log('Exists = ' + redis.exists(playerName));
+	console.log('Get = ' + redis.get(playerName));
 	if ( !redis.exists(playerName) ) {
 		console.log('added new player');
       	// create a running game for the player who started the match
@@ -52,7 +54,7 @@ module.exports.newMatch = function(playerName, targetName) {
       	// return message to tell users game started
         return "Rock, Paper, Scissors, SHOOT!";
      } else {
-      	ret = "You are already in a Match";
+      	ret = "You are already in a match";
       	console.log('already in a match');
         return ret;
     }	
