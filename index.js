@@ -105,7 +105,7 @@ function diceRoll(target) {
 
   console.log("dice: " + dice);
 
-  var ret = "Dice Rolls:";
+  var ret = "Rolls:";
   for (num of dice) {
     ret = ret + " " + num;
   }
