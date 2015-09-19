@@ -24,7 +24,7 @@ app.post('/commands', function(request, response) {
   if (text.indexOf('dice roll') > -1) {
     // user wants some dice rolls
     // TODO: expand to more than just 6 sided die
-    return response.send(diceRoll(target[2]));
+    return response.send(buildResponse(diceRoll(target[2])));
   } else if (text.indexOf('lower higher') > -1) {
     if (text.indexOf('start') > -1) {
       // start lower or higher game
@@ -103,7 +103,7 @@ function diceRoll(target) {
     }
   }
 
-  console.log("roll: " + roll);
+  console.log("dice: " + dice);
 
   var ret = "Dice Rolls:";
   for (num of dice) {
