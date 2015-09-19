@@ -76,7 +76,7 @@ function diceRoll(target) {
   // TODO: replace return strings with images
   var dice = [];
   for (var i = 0; i < target; i++) {
-    var roll = redis.getRandomNum(1,6);
+    var roll = getRandomNum(1,6);
     switch(roll) {
       case 1:
         dice.push("1");
