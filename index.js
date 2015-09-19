@@ -102,7 +102,7 @@ function diceRoll(target) {
   }
 
   var ret = "Dice Rolls:";
-  for each (num in dice) {
+  for (num of dice) {
     ret = ret + " " + num;
   }
 
