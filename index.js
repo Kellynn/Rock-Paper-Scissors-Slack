@@ -119,3 +119,10 @@ function buildResponse(text) {
   }
   return JSON.stringify(json);
 }
+
+/**
+ * Returns a random number between min (inclusive) and max (exclusive)
+ */
+function getRandomNum(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
