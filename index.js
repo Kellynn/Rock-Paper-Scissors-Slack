@@ -66,6 +66,8 @@ function gameBot(playerName) {
 }
 
 function diceRoll(target) {
+  console.log("target: " + target);
+
   if (target > 10) {
     // too many images will plague slack so 10 seems like a good arbitrary limit
     // that shouldn't be gone over
@@ -101,10 +103,14 @@ function diceRoll(target) {
     }
   }
 
+  console.log("roll: " + roll);
+
   var ret = "Dice Rolls:";
   for (num of dice) {
     ret = ret + " " + num;
   }
+
+  console.log("return value: " + ret);
 
   return ret;
 }
