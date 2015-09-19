@@ -41,43 +41,7 @@ module.exports.newMatch = function(playerName) {
       } else {
         throw new Error("Battle exists");
       }
-    })
-	// var a, b;
-	// QRedis.exists(playerName)
- //    .then(function(exists){
- //      if(!exists) {
- //        a = 'no person found';
- //      } else {
- //        b = 'something exists';
- //      }
- //    })
-
-	// // console.log('a = ' + a);
-	// // console.log('b = ' + b);
-
-	// if (redis.exists(playerName)) {
-	// 	console.log('added new player: ' + playerName);
-	// 	console.log('added new target: ' + targetName);
- //      	// create a running game for the player who started the match
- //      	var success = redis.hmset(playerName, {
- //      		"targetName" : targetName,
- //      		"playersChoice" : "not chosen",
- //      		"targetsChoice" : "not chosen"
- //      	});
- //      	// create a running game for the targeted player
- //      	redis.hmset(targetName, {
- //      		"targetName" : playerName,
- //      		"playersChoice" : null,
- //      		"targetsChoice" : null
- //      	});
-
- //      	// return message to tell users game started
- //        return "Rock, Paper, Scissors, SHOOT!";
- //     } else {
- //      	ret = "You are already in a match";
- //      	console.log('already in a match');
- //        return ret;
- //    }	
+    })	
 }
 
 module.exports.shoot = function(playerName, playersChoice) {

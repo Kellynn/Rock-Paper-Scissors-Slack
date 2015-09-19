@@ -16,30 +16,43 @@ app.get('/', function(request, response) {
   response.send('Hello There!');
 });
 
-app.get('/cool', function(request, response) {
-  response.send(cool());
-});
-
 app.post('/commands', function(request, response) {
   var userName = request.body.user_name;
   var text = request.body.text.toLowerCase();
   var target = text.split(" ");
 
-	if (text.indexOf('i challenge gamebot') > -1) {
-    return response.send(gameBot(userName));
-  } else if(text.indexOf('i challenge') > -1) {
-		response.send(buildResponse("Why don't you challenge GameBot?"));
-	} else if (text.indexOf('rock') > -1) {
-    var rock = redis.shoot(userName, 'rock');
-    response.send(buildResponse(rock));
-	} else if (text.indexOf('paper') > -1) {
-		var paper = redis.shoot(userName, 'paper');
-    response.send(buildResponse(paper));
-	} else if (text.indexOf('scissors') > -1) {
-    var scissors = redis.shoot(userName, 'scissors');
-    response.send(buildResponse(paper));
-	} else if (text.indexOf('delete') > -1) {
-    response.send(buildResponse(redis.del(userName)));
+  if (text.indexOf('dice roll') > -1) {
+    // user wants some dice rolls
+    // TODO: expand to more than just 6 sided die
+    return response.send(diceRoll(target[2]));
+  } else if (text.indexOf('lower higher') {
+    if (text.indexOf('start') > -1) {
+      // start lower or higher game
+    } else if (text.indexOf('lower') > -1) {
+      // user guessed lower
+    } else if (text.indexOf('higher') > -1) {
+      // user guessed higher
+    }
+  } else if (text.indexOf('rps') > -1) {
+    // User wants to play rock paper scissors - find of which step they are at
+    if (text.indexOf('i challenge gamebot') > -1) {
+      return response.send(gameBot(userName));
+    } else if(text.indexOf('i challenge') > -1) {
+      // TODO: add in ability to play against other players
+      // Will need to enable slash commands
+      response.send(buildResponse("Why don't you challenge GameBot?"));
+    } else if (text.indexOf('rock') > -1) {
+      var rock = redis.shoot(userName, 'rock');
+      response.send(buildResponse(rock));
+    } else if (text.indexOf('paper') > -1) {
+      var paper = redis.shoot(userName, 'paper');
+      response.send(buildResponse(paper));
+    } else if (text.indexOf('scissors') > -1) {
+      var scissors = redis.shoot(userName, 'scissors');
+      response.send(buildResponse(paper));
+    } else if (text.indexOf('delete') > -1) {
+      response.send(buildResponse(redis.del(userName)));
+    }
   }
 });
 
@@ -52,6 +65,50 @@ function gameBot(playerName) {
   return buildResponse('Rock, Paper, Scissors, SHOOT!');
 }
 
+function diceRoll(target) {
+  if (target > 10) {
+    // too many images will plague slack so 10 seems like a good arbitrary limit
+    // that shouldn't be gone over
+    return "Too many dice for GameBot";
+  }
+
+  // Create an array of all the dice rolls
+  // TODO: replace return strings with images
+  var dice = [];
+  for (var i = 0; i < target; i++) {
+    var roll = redis.getRandomNum(1,6);
+    switch(roll) {
+      case 1:
+        dice.push("1");
+        break;
+      case 2:
+        dice.push("2");
+        break;
+      case 3: 
+        dice.push("3");
+        break;
+      case 4:
+        dice.push("4");
+        break;
+      case 5:
+        dice.push("5");
+        break;
+      case 6:
+        dice.push("6");
+        break;
+      default:
+        return "option not found";
+    }
+  }
+
+  var ret = "Dice Rolls:";
+  for each (num in dice) {
+    ret = ret + " " + num;
+  }
+
+  return ret;
+}
+
 /*
 * Helper function to build the JSON to send back to Slack.
 */
@@ -61,20 +118,4 @@ function buildResponse(text) {
     "username" : "GameBot"
   }
   return JSON.stringify(json);
-}
-
-/*
-* Helper function to match commands, instead of a switch statement,
-* because then you can do stuff like use Regex here or something fancier.
-* Also keeps all the possible commands and their trigger words in one place.
-*/
-function matchCommands(commandArray, command) {
-  var commandsDict = {
-    "CHALLENGE": "I challenge",
-    "PAPER": "paper",
-    "ROCK" : "rock",
-    "SCISSORS" : "scissors"
-  }
-  var cmdString = commandArray.join(" ").toLowerCase().replace("rps ", "");
-  return cmdString.indexOf(commandsDict[command]) === 0;
 }
