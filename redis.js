@@ -21,6 +21,7 @@ if(process.env.REDISTOGO_URL) {
 
 QRedis = {};
 QRedis.exists = Q.nbind(redis.exists, redis);
+QRedis.set = Q.nbind(redis.set, redis);
 
 module.exports = {};
 
@@ -34,7 +35,7 @@ module.exports.newMatch = function(playerName) {
 	return Qredis.exists("currentBattle")
     .then(function(exists){
       if(!exists) {
-        return redis.set(playerName, "true");
+        return Qredis.set(playerName, "true");
       } else {
         throw new Error("Battle exists");
       }
@@ -44,6 +45,10 @@ module.exports.newMatch = function(playerName) {
 module.exports.shoot = function(playerName, playersChoice, randomNum) {
 	// 1 == Rock, 2 == Paper, 3 = Scissors
 	var gameBot = randomNum;
+	var text, winner,
+		rock_image = "http://kellyw.net/includes/images/rockwins.png",
+		paper_image = "http://kellyw.net/includes/images/paperwins.png",
+		scissors_image = "http://kellyw.net/includes/images/scissorswins.png";
 	console.log(gameBot);
 
 	if (redis.get(playerName)) {
@@ -51,19 +56,50 @@ module.exports.shoot = function(playerName, playersChoice, randomNum) {
 			|| gameBot == 2 && playersChoice == 'paper'
 			|| gameBot == 3 && playersChoice == 'scissors') {
 			redis.del(playerName);
-			return 'It\'s a tie! GameBot will win next time!';
+			winner = 'tie';
+			text[0] = 'It\'s a tie! GameBot will win next time!';
 		}
 		if (gameBot == 1 && playersChoice == 'paper'
 			|| gameBot == 2 && playersChoice == 'scissors'
 			|| gameBot == 3 && playersChoice == 'rock') {
 			redis.del(playerName);
-			return 'You won! Congrats.';
+			winner = playersChoice
+			text[0] = 'You won! Congrats.';
 		} else {
 			redis.del(playerName);
-			return 'GameBot won! Sorry.';
+			winner = GameBot
+			text[0] = 'GameBot won! Sorry.';
 		}
+
+		switch(winner) {
+			case 2:
+			case 'paper':
+				text[1] = {
+					"text" : "Paper wins!",
+					"image_url" : paper_image
+				}
+				break;
+			case 1:
+			case 'rock':
+				text[1] = {
+					"text" : "Rock wins!",
+					"image_url" : rock_image
+				}
+				break;
+			case 3:
+			case ' scissors': 
+				text[1] = {
+					"text" : "Scissors wins!",
+					"image_url" : scissors_image
+				}
+				break;
+			default:
+				text[1] = null;
+		}
+		return text;
 	} else {
-		return 'Please start a match with GameBot';
+		text[0] = 'Please start a match with GameBot';
+		return text;
 	}
 }
 

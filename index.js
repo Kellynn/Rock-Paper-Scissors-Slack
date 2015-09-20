@@ -109,13 +109,13 @@ function diceRoll(target) {
 /*
 * Helper function to build the JSON to send back to Slack.
 */
-function buildResponse(text, attachments) {
-  var attachment;
+function buildResponse(text) {
+  var attachment, attachments = text[1];
   if (attachments) {
     attachment = formatAttachments(attachments);
   }
   var json = {
-    "text": text,
+    "text": text[0],
     "username" : "GameBot",
     "attachment" : JSON.stringify(attachment)
   }
@@ -145,12 +145,7 @@ function exists(needle, haystack) {
 function formatAttachments(attachments) {
   var json, jsonArray;
   for (attachment of attachments) {
-    json = {
-      "title" : attachment[0],
-      "text" : attachment[1],
-      "image_url" : attachment[3]
-    }
-    jsonArray.push(json);
+    jsonArray.push(attachment);
   }
   return jsonArray;
 }
