@@ -30,16 +30,15 @@ var ret = null;
 /* Methods for rock, paper scissors
 * TODO: add ability to play rps between users, not just against gamebot
 */
-
 module.exports.newMatch = function(playerName) {
-	return redis.exists(playerName)
+	return QRedis.exists(playerName)
     .then(function(exists){
       if(!exists) {
-        return redis.set(playerName, "true");
+        return QRedis.set(playerName, "true");
       } else {
         throw new Error("Battle exists");
       }
-    });
+    })	
 }
 
 module.exports.shoot = function(playerName, playersChoice, randomNum) {
