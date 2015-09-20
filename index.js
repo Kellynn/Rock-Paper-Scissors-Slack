@@ -133,6 +133,8 @@ function getRandomNum(min, max) {
 * Return if a string exists in another string
 */
 function exists(needle, haystack) {
+  console.log("Needle: " + needle);
+  console.log("haystack: " + haystack);
   var dictionary = {
     "dice": "dice roll",
     "lh": "lower higher",
@@ -141,6 +143,7 @@ function exists(needle, haystack) {
     "rock" : "rock",
     "scissors" : "scissors"
   }
+  console.log("dictionary[needle]: " + dictionary[needle]);
   return haystack.indexOf(dictionary[needle]) === 0;
 }
 
