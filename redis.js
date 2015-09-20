@@ -74,6 +74,8 @@ module.exports.shoot = function(playerName, playersChoice, randomNum) {
 			case 2:
 			case 'paper':
 				text[1] = {
+					"fallback" : "Attachment failed",
+					"title" : "Rock, Paper, Scissors Results",
 					"text" : "Paper wins!",
 					"image_url" : paper_image
 				}
@@ -81,6 +83,8 @@ module.exports.shoot = function(playerName, playersChoice, randomNum) {
 			case 1:
 			case 'rock':
 				text[1] = {
+					"fallback" : "Attachment failed",
+					"title" : "Rock, Paper, Scissors Results",
 					"text" : "Rock wins!",
 					"image_url" : rock_image
 				}
@@ -88,6 +92,8 @@ module.exports.shoot = function(playerName, playersChoice, randomNum) {
 			case 3:
 			case ' scissors': 
 				text[1] = {
+					"fallback" : "Attachment failed",
+					"title" : "Rock, Paper, Scissors Results",
 					"text" : "Scissors wins!",
 					"image_url" : scissors_image
 				}

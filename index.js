@@ -133,9 +133,10 @@ function buildResponse(text) {
   var json = {
     "text": text[0],
     "username" : "GameBot",
-    "attachment" : text[1]
+    "attachments" : text[1]
   }
-  console.log("json before the final push: " + json);
+  var temp = JSON.stringify(json);
+  console.log("json before the final push: " + temp);
   return JSON.stringify(json);
 }
 
