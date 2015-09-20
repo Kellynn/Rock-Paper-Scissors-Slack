@@ -44,7 +44,7 @@ module.exports.newMatch = function(playerName) {
 module.exports.shoot = function(playerName, playersChoice, randomNum) {
 	// 1 == Rock, 2 == Paper, 3 = Scissors
 	var gameBot = randomNum;
-	var text, winner,
+	var text = [], winner,
 		rock_image = "http://kellyw.net/includes/images/rockwins.png",
 		paper_image = "http://kellyw.net/includes/images/paperwins.png",
 		scissors_image = "http://kellyw.net/includes/images/scissorswins.png";

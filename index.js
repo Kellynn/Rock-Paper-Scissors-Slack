@@ -41,7 +41,7 @@ app.post('/commands', function(request, response) {
   } else if (exists('rps', text)) {
     // User wants to play rock paper scissors - find of which step they are at
     if (exists('i challenge gamebot', text)) {
-      return response.send(gameBot(userName));
+      return response.send(buildResponse(gameBot(userName)));
     } else if(exists('i challenge', text)) {
       // TODO: add in ability to play against other players
       // Will need to enable slash commands
@@ -57,14 +57,24 @@ app.post('/commands', function(request, response) {
 
 function gameBot(playerName) {
   redis.newMatch(playerName);
-  return buildResponse('Rock, Paper, Scissors, SHOOT!');
+  var text = [];
+  text[0] = 'Rock, Paper, Scissors, SHOOT!'
+  return text;
 }
 
 function diceRoll(target) {
+  var text = [];
   if (target > 10) {
     // too many images will plague slack so 10 seems like a good arbitrary limit
     // that shouldn't be gone over
-    return "Too many dice for GameBot";
+    text[0] = "Too many dice for GameBot";
+    return text;
+  } else if (target == 0) {
+    text[0] = "Why are you asking GameBot to roll nothing?";
+    return text;
+  }else if (target < 0) {
+    text[0] = "Don't be so negative";
+    return text;
   }
 
   // Create an array of all the dice rolls
