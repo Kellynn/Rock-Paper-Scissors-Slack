@@ -73,30 +73,15 @@ module.exports.shoot = function(playerName, playersChoice, randomNum) {
 		switch(winner) {
 			case 2:
 			case 'paper':
-				text[1] = {
-					"fallback" : "Attachment failed",
-					"title" : "Rock, Paper, Scissors Results",
-					"text" : "Paper wins!",
-					"image_url" : paper_image
-				}
+				text[0] = text[0] + " " + paper_image;
 				break;
 			case 1:
 			case 'rock':
-				text[1] = {
-					"fallback" : "Attachment failed",
-					"title" : "Rock, Paper, Scissors Results",
-					"text" : "Rock wins!",
-					"image_url" : rock_image
-				}
+				text[0] = text[0] + " " + rock_image;
 				break;
 			case 3:
 			case ' scissors': 
-				text[1] = {
-					"fallback" : "Attachment failed",
-					"title" : "Rock, Paper, Scissors Results",
-					"text" : "Scissors wins!",
-					"image_url" : scissors_image
-				}
+				text[0] = text[0] + " " + scissors_image;
 				break;
 			default:
 				text[1] = null;

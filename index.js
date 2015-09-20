@@ -132,7 +132,7 @@ function buildResponse(text) {
 
   var json = {
     "text": text[0],
-    "username" : "GameBot",
+    "user_name" : "GameBot",
     "attachments" : text[1]
   }
   var temp = JSON.stringify(json);
