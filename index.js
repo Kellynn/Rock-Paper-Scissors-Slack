@@ -143,9 +143,12 @@ function exists(needle, haystack) {
 }
 
 function formatAttachments(attachments) {
-  var json, jsonArray;
+  var json, jsonArray, i = 0;
   for (attachment of attachments) {
-    jsonArray.push(attachment);
+    if (attachment) {
+      jsonArray[i] = attachment); 
+      i++;  
+    }
   }
   return jsonArray;
 }
