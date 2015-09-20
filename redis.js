@@ -32,14 +32,14 @@ var ret = null;
 */
 
 module.exports.newMatch = function(playerName) {
-	return Qredis.exists("currentBattle")
+	return Qredis.exists(playerName)
     .then(function(exists){
       if(!exists) {
         return Qredis.set(playerName, "true");
       } else {
         throw new Error("Battle exists");
       }
-    })	
+    });
 }
 
 module.exports.shoot = function(playerName, playersChoice, randomNum) {
