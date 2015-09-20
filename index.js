@@ -98,9 +98,9 @@ function diceRoll(target) {
 
   // convert rolls to a single string
   // will eventually be creating attachments with images
-  var ret = "Rolls:";
+  var ret[0] = "Rolls:";
   for (num of dice) {
-    ret = ret + " " + num;
+    ret[0] = ret[0] + " " + num;
   }
 
   return ret;
@@ -110,6 +110,9 @@ function diceRoll(target) {
 * Helper function to build the JSON to send back to Slack.
 */
 function buildResponse(text) {
+  console.log("Text[0]: " + text[0]);
+  console.log("Text[1]: " + text[1]);
+
   var attachment, attachments = text[1];
   if (attachments) {
     attachment = formatAttachments(attachments);
