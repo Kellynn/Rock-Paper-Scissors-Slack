@@ -124,15 +124,18 @@ function buildResponse(text) {
   console.log("Text[0]: " + text[0]);
   console.log("Text[1]: " + text[1]);
 
+  // Will be used once I add dice roll's multiple images
   var attachment, attachments = text[1];
   if (attachments) {
     attachment = formatAttachments(attachments);
   }
+
   var json = {
     "text": text[0],
     "username" : "GameBot",
-    "attachment" : JSON.stringify(attachment)
+    "attachment" : text[1]
   }
+  console.log("json before the final push: " + json);
   return JSON.stringify(json);
 }
 
@@ -156,6 +159,10 @@ function exists(needle, haystack) {
   }
 }
 
+/*
+* Returns an array of attachments for the response
+* NOTE: currently not used - will be used once dice roll has its images added
+*/
 function formatAttachments(attachments) {
   console.log(attachments);
   var json, jsonArray = [], i = 0;
