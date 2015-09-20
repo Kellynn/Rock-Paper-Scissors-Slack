@@ -17,52 +17,44 @@ if(process.env.REDISTOGO_URL) {
   redis = require("redis").createClient();
 }
 
-QRedis = {};
-
-QRedis.sadd = Q.nbind(redis.sadd, redis);
-QRedis.hmset = Q.nbind(redis.hmset, redis);
-QRedis.hgetall = Q.nbind(redis.hgetall, redis);
-QRedis.exists = Q.nbind(redis.exists, redis);
-QRedis.del = Q.nbind(redis.del, redis);
-QRedis.set = Q.nbind(redis.set, redis);
-QRedis.get = Q.nbind(redis.get, redis);
-QRedis.decrby = Q.nbind(redis.decrby, redis);
-QRedis.smembers = Q.nbind(redis.smembers, redis);
-
 module.exports = {};
 
 var ret = null;
 
+/* Methods for rock, paper scissors
+* TODO: add ability to play rps between users, not just against gamebot
+*/
+
 module.exports.newMatch = function(playerName) {
-	return QRedis.exists("currentBattle")
+	return redis.exists("currentBattle")
     .then(function(exists){
       if(!exists) {
-        return QRedis.set(playerName, "true");
+        return redis.set(playerName, "true");
       } else {
         throw new Error("Battle exists");
       }
     })	
 }
 
-module.exports.shoot = function(playerName, playersChoice) {
+module.exports.shoot = function(playerName, playersChoice, randomNum) {
 	// 1 == Rock, 2 == Paper, 3 = Scissors
-	var gameBot = getRandomNum(1, 3);
+	var gameBot = randomNum;
 	console.log(gameBot);
 
 	if (redis.get(playerName)) {
 		if (gameBot == 1 && playersChoice == 'rock'
 			|| gameBot == 2 && playersChoice == 'paper'
 			|| gameBot == 3 && playersChoice == 'scissors') {
-			QRedis.del(playerName);
+			redis.del(playerName);
 			return 'It\'s a tie! GameBot will win next time!';
 		}
 		if (gameBot == 1 && playersChoice == 'paper'
 			|| gameBot == 2 && playersChoice == 'scissors'
 			|| gameBot == 3 && playersChoice == 'rock') {
-			QRedis.del(playerName);
+			redis.del(playerName);
 			return 'You won! Congrats.';
 		} else {
-			QRedis.del(playerName);
+			redis.del(playerName);
 			return 'GameBot won! Sorry.';
 		}
 	} else {
@@ -70,99 +62,12 @@ module.exports.shoot = function(playerName, playersChoice) {
 	}
 }
 
-/**
- * Returns a random number between min (inclusive) and max (exclusive)
- */
-function getRandomNum(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-// module.exports.shoot = function(playerName, playersChoice) {
-// 	if ( QRedis.exists(playerName) ) {
-//         console.log('shoot');
-//         var targetName = null, targetsChoice = null;
-
-//     	// get your game
-// 		redis.hgetall(playerName, function (err, results) {
-// 		   if (err) {
-// 		   		console.log('There was an error in hgetall in shoot');
-// 		   } else {
-// 		    	// do something with results
-// 		    	if (results && results.targetName) {
-// 			    	console.log("1: " + results.targetName);
-// 			    	targetName = results.targetName;
-
-// 			    	// see if your target has chosen something yet
-// 					if (targetName) {
-// 						console.log("Checking for targets choice");
-// 						redis.hgetall(targetName, function (err, results) {
-// 							if (err) {
-// 								console.log('There was an error');
-// 							} else {
-// 								console.log("2: " + results);
-// 								if (results.playersChoice) {
-// 									// can obtain the other person's play
-// 									targetsChoice = results.playersChoice;
-
-// 									// set your choice
-// 							    	redis.hmset(playerName, {
-// 							    		"targetName" : targetName,
-// 							    		"playersChoice" : playersChoice,
-// 							    		"targetsChoice" : targetsChoice
-// 							    	});
-
-// 							    	console.log("playersChoice: " + playersChoice);
-// 							    	console.log("targetsChoice: " + targetsChoice);	
-
-// 							    	// if both choices are filled in, return who won
-// 							    	if (playersChoice && targetsChoice) {
-// 							    		if (playersChoice === targetsChoice) {
-// 							    			redis.del(targetName);
-// 							    			redis.del(playerName);
-// 							    			return 'It\'s a tie!';
-// 							    		} else if (playersChoice == 'paper' && targetsChoice == 'rock'
-// 							    			|| playersChoice == 'rock' && targetsChoice == 'scissors'
-// 							    			|| playersChoice == 'scissors' && targetsChoice) {
-// 							    			redis.del(targetName);
-// 							    			redis.del(playerName);
-// 							    			return playerName + 'Wins!';
-
-// 							    		} else {
-// 							    			redis.del(targetName);
-// 							    			redis.del(playerName);
-// 							    			return targetName + "Wins!";
-// 							    		}
-// 							    	}							
-// 								} else {
-// 									// set your choice
-// 							    	redis.hmset(playerName, {
-// 							    		"targetName" : targetName,
-// 							    		"playersChoice" : playersChoice,
-// 							    		"targetsChoice" : targetsChoice
-// 							    	});
-
-// 									// player has not chosen yet
-// 									return "Waiting for other player to shoot";
-// 								}
-// 							}
-// 						})
-// 					}
-// 		    	}
-// 		   }
-// 		});
-//     } else {
-//       	console.log('a new match needs to be started');
-//         ret = "Start a new match: 'rps I challenge ____'";
-//         return ret;
-//     }
-// }
-
 module.exports.del = function(playerName) {
-	return QRedis.exists(playerName)
+	return redis.exists(playerName)
 	    .then(function(exists){
 	      if(exists) {
 	      	console.log('key deleted');
-	      	return QRedis.del(playerName);
+	      	return redis.del(playerName);
 	      } else {
 	      	console.log('nothing to delete');
 	        throw new Error("No match by that player found");

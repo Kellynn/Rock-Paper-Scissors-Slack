@@ -13,7 +13,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // app.set('view engine', 'ejs');
 
 app.get('/', function(request, response) {
-  response.send('Hello There!');
+  response.send('Hello World! You found the slack GameBot app.');
+});
+
+app.listen(app.get('port'), function() {
+  console.log('Node app is running on port', app.get('port'));
 });
 
 app.post('/commands', function(request, response) {
@@ -21,43 +25,34 @@ app.post('/commands', function(request, response) {
   var text = request.body.text.toLowerCase();
   var target = text.split(" ");
 
-  if (text.indexOf('dice roll') > -1) {
+  if (exists('dice roll', text)) {
     // user wants some dice rolls
     // TODO: expand to more than just 6 sided die
     return response.send(buildResponse(diceRoll(target[2])));
-  } else if (text.indexOf('lower higher') > -1) {
-    if (text.indexOf('start') > -1) {
+  } else if (exists('lower higher', text)) {
+    // user wants to play the lower or higher card game
+    if (exists('start', text)) {
       // start lower or higher game
-    } else if (text.indexOf('lower') > -1) {
+    } else if (exists('lower', text)) {
       // user guessed lower
-    } else if (text.indexOf('higher') > -1) {
+    } else if (exists('higher', text)) {
       // user guessed higher
     }
-  } else if (text.indexOf('rps') > -1) {
+  } else if (exists('rps', text)) {
     // User wants to play rock paper scissors - find of which step they are at
-    if (text.indexOf('i challenge gamebot') > -1) {
+    if (exists('i challenge gamebot', text)) {
       return response.send(gameBot(userName));
-    } else if(text.indexOf('i challenge') > -1) {
+    } else if(exists('i challenge', text)) {
       // TODO: add in ability to play against other players
       // Will need to enable slash commands
       response.send(buildResponse("Why don't you challenge GameBot?"));
-    } else if (text.indexOf('rock') > -1) {
-      var rock = redis.shoot(userName, 'rock');
-      response.send(buildResponse(rock));
-    } else if (text.indexOf('paper') > -1) {
-      var paper = redis.shoot(userName, 'paper');
-      response.send(buildResponse(paper));
-    } else if (text.indexOf('scissors') > -1) {
-      var scissors = redis.shoot(userName, 'scissors');
-      response.send(buildResponse(paper));
-    } else if (text.indexOf('delete') > -1) {
+    } else if (exists('rock', text) || exists('paper', text) || exists('scissors', text)) {
+      var result = redis.shoot(userName, target[1], getRandomNum(1,3));
+      response.send(buildResponse(result));
+    } else if (exists('delete', text)) {
       response.send(buildResponse(redis.del(userName)));
     }
   }
-});
-
-app.listen(app.get('port'), function() {
-  console.log('Node app is running on port', app.get('port'));
 });
 
 function gameBot(playerName) {
@@ -66,8 +61,6 @@ function gameBot(playerName) {
 }
 
 function diceRoll(target) {
-  console.log("target: " + target);
-
   if (target > 10) {
     // too many images will plague slack so 10 seems like a good arbitrary limit
     // that shouldn't be gone over
@@ -103,14 +96,12 @@ function diceRoll(target) {
     }
   }
 
-  console.log("dice: " + dice);
-
+  // convert rolls to a single string
+  // will eventually be creating attachments with images
   var ret = "Rolls:";
   for (num of dice) {
     ret = ret + " " + num;
   }
-
-  console.log("return value: " + ret);
 
   return ret;
 }
@@ -118,10 +109,15 @@ function diceRoll(target) {
 /*
 * Helper function to build the JSON to send back to Slack.
 */
-function buildResponse(text) {
+function buildResponse(text, attachments) {
+  var attachment;
+  if (attachments) {
+    attachment = formatAttachments(attachments);
+  }
   var json = {
     "text": text,
-    "username" : "GameBot"
+    "username" : "GameBot",
+    "attachment" : JSON.stringify(attachment)
   }
   return JSON.stringify(json);
 }
@@ -131,4 +127,32 @@ function buildResponse(text) {
  */
 function getRandomNum(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+/*
+* Return if a string exists in another string
+*/
+function exists(needle, haystack) {
+  var dictionary = {
+    "dice": "dice roll",
+    "lh": "lower higher",
+    "challenge": "i challenge",
+    "paper": "paper",
+    "rock" : "rock",
+    "scissors" : "scissors"
+  }
+  return haystack.indexOf(dictionary[needle]) === 0;
+}
+
+function formatAttachments(attachments) {
+  var json, jsonArray;
+  for (attachment of attachments) {
+    json = {
+      "title" : attachment[0],
+      "text" : attachment[1],
+      "image_url" : attachment[3];
+    }
+    jsonArray.push(json);
+  }
+  return jsonArray;
 }
