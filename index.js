@@ -157,12 +157,15 @@ function exists(needle, haystack) {
 }
 
 function formatAttachments(attachments) {
+  console.log(attachments);
   var json, jsonArray = [], i = 0;
-  for (attachment of attachments) {
+  if (attachments) {
+    for (attachment in attachments) {
     if (attachment) {
       jsonArray[i] = attachment; 
       i++;  
     }
+  }
   }
   return jsonArray;
 }
