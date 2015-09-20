@@ -32,10 +32,10 @@ var ret = null;
 */
 
 module.exports.newMatch = function(playerName) {
-	return Qredis.exists(playerName)
+	return redis.exists(playerName)
     .then(function(exists){
       if(!exists) {
-        return Qredis.set(playerName, "true");
+        return redis.set(playerName, "true");
       } else {
         throw new Error("Battle exists");
       }
