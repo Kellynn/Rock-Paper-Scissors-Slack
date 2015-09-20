@@ -143,7 +143,7 @@ function exists(needle, haystack) {
 }
 
 function formatAttachments(attachments) {
-  var json, jsonArray, i = 0;
+  var json, jsonArray = [], i = 0;
   for (attachment of attachments) {
     if (attachment) {
       jsonArray[i] = attachment; 
