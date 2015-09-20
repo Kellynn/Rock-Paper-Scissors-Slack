@@ -17,6 +17,11 @@ if(process.env.REDISTOGO_URL) {
   redis = require("redis").createClient();
 }
 
+/* Turn Redis Methods Into Promise-returning Ones */
+
+QRedis = {};
+QRedis.exists = Q.nbind(redis.exists, redis);
+
 module.exports = {};
 
 var ret = null;
