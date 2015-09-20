@@ -150,7 +150,7 @@ function formatAttachments(attachments) {
     json = {
       "title" : attachment[0],
       "text" : attachment[1],
-      "image_url" : attachment[3];
+      "image_url" : attachment[3]
     }
     jsonArray.push(json);
   }
