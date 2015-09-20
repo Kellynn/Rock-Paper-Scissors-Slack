@@ -31,7 +31,7 @@ var ret = null;
 */
 
 module.exports.newMatch = function(playerName) {
-	return redis.exists("currentBattle")
+	return Qredis.exists("currentBattle")
     .then(function(exists){
       if(!exists) {
         return redis.set(playerName, "true");
