@@ -98,7 +98,8 @@ function diceRoll(target) {
 
   // convert rolls to a single string
   // will eventually be creating attachments with images
-  var ret[] = "Rolls:";
+  var ret = [];
+  ret[0] = "Rolls:";
   for (num of dice) {
     ret[0] = ret[0] + " " + num;
   }
