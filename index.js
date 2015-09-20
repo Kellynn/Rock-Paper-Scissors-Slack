@@ -146,7 +146,7 @@ function formatAttachments(attachments) {
   var json, jsonArray, i = 0;
   for (attachment of attachments) {
     if (attachment) {
-      jsonArray[i] = attachment); 
+      jsonArray[i] = attachment; 
       i++;  
     }
   }
