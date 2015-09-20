@@ -138,6 +138,8 @@ function exists(needle, haystack) {
   var dictionary = {
     "dice": "dice roll",
     "lh": "lower higher",
+    "rps" : "rps",
+    "gamebot": "i challenge gamebot",
     "challenge": "i challenge",
     "paper": "paper",
     "rock" : "rock",
