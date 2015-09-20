@@ -66,7 +66,7 @@ module.exports.shoot = function(playerName, playersChoice, randomNum) {
 			text[0] = 'You won! Congrats.';
 		} else {
 			redis.del(playerName);
-			winner = GameBot
+			winner = gameBot
 			text[0] = 'GameBot won! Sorry.';
 		}
 
